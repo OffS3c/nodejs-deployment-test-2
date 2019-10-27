@@ -9,14 +9,14 @@ script:
   - docker run -e CI=true client:latest npm run test -- --coverage
 
 after_success:
-  - docker build -t OffS3c/client:latest ./client
-  - docker build -t OffS3c/nginx:latest ./nginx
-  - docker build -t OffS3c/server:latest ./server
-  - docker build -t OffS3c/worker:latest ./worker
+  - docker build -t offs3c/client:latest ./client
+  - docker build -t offs3c/nginx:latest ./nginx
+  - docker build -t offs3c/server:latest ./server
+  - docker build -t offs3c/worker:latest ./worker
   # login to docker
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # push images to docker hub
-  - docker push OffS3c/client:latest
-  - docker push OffS3c/nginx:latest
-  - docker push OffS3c/server:latest
-  - docker push OffS3c/worker:latest
+  - docker push offs3c/client:latest
+  - docker push offs3c/nginx:latest
+  - docker push offs3c/server:latest
+  - docker push offs3c/worker:latest
