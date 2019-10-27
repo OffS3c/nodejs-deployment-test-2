@@ -3,20 +3,20 @@ services:
   - docker
 
 before_install:
-  - docker build -t test1:latest -f Dockerfile.dev .
+  - docker build -t client:latest -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true test1:latest npm run test -- --coverage
+  - docker run -e CI=true client:latest npm run test -- --coverage
 
-deploy:
-  provider: elasticbeanstalk
-  region: "us-east-1"
-  app: "test1"
-  env: "Test1-env"
-  bucket_name: "elasticbeanstalk-us-east-1-384876518994"
-  bucket_path: "test1"
-  on:
-    branch: master
-  access_key_id: $AWS_ACCESS_KEY_ID
-  secret_access_key:
-    secure: "$AWS_ACCESS_SECRET"
+after_success:
+  - docker build -t OffS3c/client:latest ./client
+  - docker build -t OffS3c/nginx:latest ./nginx
+  - docker build -t OffS3c/server:latest ./server
+  - docker build -t OffS3c/worker:latest ./worker
+  # login to docker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push images to docker hub
+  - docker push OffS3c/client:latest
+  - docker push OffS3c/nginx:latest
+  - docker push OffS3c/server:latest
+  - docker push OffS3c/worker:latest
