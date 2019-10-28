@@ -20,3 +20,16 @@ after_success:
   - docker push offs3c/nginx:latest
   - docker push offs3c/server:latest
   - docker push offs3c/worker:latest
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "test2"
+  env: "Test2-env"
+  bucket_name: "elasticbeanstalk-us-east-1-384876518994"
+  bucket_path: "test2"
+  on:
+    branch: master
+  access_key_id:
+    secure: $AWS_ACCESS_KEY_ID
+  secret_access_key:
+    secure: "$AWS_ACCESS_SECRET"
